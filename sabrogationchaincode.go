@@ -304,38 +304,13 @@ func (t *sabrogationChaincode) createClaim(stub shim.ChaincodeStubInterface, arg
 		return nil, errors.New("Incorrect Number of arguments.Expecting 21 for add")
 	}
 
-	key := args[0]   //Entity ex: customer
 
-	// GET the state of entity from the ledger
-	bytes, err := stub.GetState(key)
-	if err != nil {
-		return nil, errors.New("Failed to get state of " + key)
-	}
-
-	entity := Entity{}
-	err = json.Unmarshal(bytes, &entity)
-	if err != nil {
-		fmt.Println("Error Unmarshaling entity Bytes")
-		return nil, errors.New("Error Unmarshaling entity Bytes")
-	}
-
-             //type1 := entity.Type
-
-
-
-
-	// Write the state back to the ledger
-	bytes, err = json.Marshal(entity)
-	if err != nil {
-		fmt.Println("Error marshaling entity")
-		return nil, errors.New("Error marshaling entity")
-	}
-	err = stub.PutState(key, bytes)
-	if err != nil {
-		return nil, err
-	}
 	ID := stub.GetTxID()
 blockTime, err := stub.GetTxTimestamp()
+if err != nil {
+	
+	return nil, err
+}
 args = append(args, ID)
 args = append(args, blockTime.String())
 		t.putTxnClaim(stub, args)
